@@ -1,0 +1,26 @@
+﻿<#
+if (string.IsNullOrEmpty(Namespace)) Namespace=ConnectionStringName;
+if (string.IsNullOrEmpty(Namespace)) Namespace="Generator";
+#>
+using System;
+using System.Collections.Generic;
+
+namespace <#=Namespace #>
+{
+<#
+foreach(Table tbl in from t in tables where !t.Ignore select t)
+{
+#>
+    public partial class <#=tbl.Name#>
+    {
+<#
+foreach(Column col in from c in tbl.Columns where !c.Ignore select c)
+{
+		// Column bindings
+#>
+		public <#=col.PropertyType #><#=CheckNullable(col)#> <#=col.PropertyName #> { get; set; }
+<# } #>
+	}
+
+<# } #>
+}
